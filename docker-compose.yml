@@ -1,0 +1,21 @@
+services:
+  database:
+    image: postgres:18.3
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: pass
+      POSTGRES_USER: admin
+      POSTGRES_DB: todo
+    volumes:
+      - ./data:/var/lib/postgresql
+
+
+  app:
+    build: .
+    restart: always
+    environment:
+      SQLALCHEMY_DATABASE_URI: "postgresql://admin:pass@database:5432/todo"
+    ports:
+      - "6400:6400"
+    depends_on:
+      - database
